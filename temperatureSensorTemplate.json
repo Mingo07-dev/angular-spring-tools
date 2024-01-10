@@ -1,0 +1,23 @@
+{
+    "id": "Room1",
+    "type": "TemperatureSensor",
+    "dateObserved": {
+        "type": "DateTime",
+        "value": "2018-08-07T12:00:00"
+    },
+    "temperature": {
+        "value": 23,
+        "type": "Float"
+    },
+    "location": {
+        "type": "geo:json",
+        "value": {
+             "type": "Point",
+             "coordinates": [13.3986, 52.5547]
+        }
+    },
+    "description": {
+        "type": "sensor",
+        "value": "Sensore Stanza 1"
+    }
+}

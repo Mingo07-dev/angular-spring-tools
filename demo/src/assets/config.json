@@ -1,0 +1,4 @@
+{
+    "contextBroker": "http://localhost:1026",
+    "crossOrigin": "http://localhost:4200"
+}
