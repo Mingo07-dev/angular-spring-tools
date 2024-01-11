@@ -58,8 +58,6 @@ export class MqaService {
       })
     }
 
-
-    
     async submitAnalisysJSON(id : String, url: String): Promise<any> {
       let xml = await  new Promise(async(resolve,reject)=>{
       this.http.get("/assets/interstat_rdf.json").subscribe((data: any) => {
@@ -91,5 +89,13 @@ export class MqaService {
       })
     }
 
-    
+
+    async getXML(): Promise<any> {
+      let xml = await  new Promise(async(resolve,reject)=>{
+      this.http.get("/assets/interstat_rdf.json").subscribe((data: any) => {
+          resolve(data.xml)
+        })
+      })
+      return xml
+    }
 }
