@@ -15,21 +15,21 @@
             <p style="font-size: small;">This API allows user to get the score and all the values of metrics for a catalogue chosed by ID. <br>
             Try changing filters!</p>
 
-            <form action="getCatalogue">
+            <nb-form-field action="getCatalogue">
                 <div class="form-group">
                     <label for="ID"><b>ID*</b></label>
                     <input #ID nbInput fullWidth shape="round" type="text" placeholder="ID" name="ID" required value="659fd47c58771f020b83e39d" disabled>
 
                 </div>
                 <button status="primary" nbButton (click)="getCatalogue(ID.value)" type="submit">Find</button>
-            </form>
+            </nb-form-field>
 
             <br>
             <hr>
 
             <h5>Get Catalogue Analisys by ID and filter by params</h5>
             <p style="font-size: small;">This API allows user to get the chosen metrics and scores for a catalogue chosed by ID.</p>
-            <form action="getFiltered">
+            <nb-form-field action="getFiltered">
                 <div class="form-group">
                     <label for="ID"><b>ID*</b></label>
                     <input #ID nbInput fullWidth shape="round" type="text" placeholder="ID" name="ID" required value="659fd47c58771f020b83e39d" disabled>
@@ -38,7 +38,7 @@
 
                 </div>
                 <button status="primary" nbButton (click)="getFiltered(ID.value,FILTERS.value)" type="submit">Find</button>
-            </form>
+            </nb-form-field>
             
             <br>
             <hr>
@@ -47,7 +47,7 @@
             <p style="font-size: small;">This API allows user to send an RDF of a catalogue to make an analisys of it, if already exist an old analisys you must specify the ID, if not a new one will be created. <br>
             When API is call, it gives an immediate response with sintax results, if wrong it return an error, otherwhise will continue the analisys. <br>
             When analisys is finished, if an url was given, the results will be sent to the url. In any case results will be saved on the database and can later be read with the get API. <br>Try to use <a  target="_blank"  href="https://webhook.site">https://webhook.site</a> to get the notification, but it can take some minutes.</p>
-            <form action="submitAnalisysJSON">
+            <nb-form-field action="submitAnalisysJSON">
                 <div class="form-group">
                     <label for="ID"><b>ID</b></label>
                     <input #ID nbInput fullWidth shape="round" type="text" placeholder="ID" name="ID" required value="659fd47c58771f020b83e39d" disabled>
@@ -58,7 +58,7 @@
 
                 </div>
                 <button status="primary" nbButton (click)="submitAnalisysJSON(ID.value,URL.value,XML.value)" type="submit">Find</button>
-            </form>
+            </nb-form-field>
         </div>
         <div class="col-6">
             <div class="card">

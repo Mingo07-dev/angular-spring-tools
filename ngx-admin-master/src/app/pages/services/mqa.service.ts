@@ -13,7 +13,7 @@ export class MqaService {
 
     getCatalogue(id: String): any {
       return new Promise((resolve,reject)=>{
-        this.http.get('http://localhost:8000/get/catalogue/'+id, {
+        this.http.get('https://platform.beopen-dep.it/mqa-validator/get/catalogue/'+id, {
           headers: {
             'Content-Type':  'application/json',
             'Access-Control-Allow-Origin': '*',
@@ -38,7 +38,7 @@ export class MqaService {
     
     getFiltered(id: String, jsonData : Object): any {
       return new Promise((resolve,reject)=>{
-        this.http.post('http://localhost:8000/get/catalogue/'+id, jsonData, {
+        this.http.post('https://platform.beopen-dep.it/mqa-validator/get/catalogue/'+id, jsonData, {
           headers: {
             'Content-Type':  'application/json',
             'Access-Control-Allow-Origin': '*',
@@ -65,7 +65,7 @@ export class MqaService {
         })
       })
       return new Promise((resolve,reject)=>{
-        this.http.post('http://localhost:8000/submit', {
+        this.http.post('https://platform.beopen-dep.it/mqa-validator/submit', {
             "id": id,
             "url": url,
             "xml": xml,

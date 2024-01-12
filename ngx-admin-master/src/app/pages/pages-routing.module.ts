@@ -14,8 +14,9 @@ const routes: Routes = [{
   component: PagesComponent,
   children: [
     {
-      path: 'mqa',
-      component: MqaComponent
+      path: 'mqa',      
+      loadChildren: () => import('./mqa/mqa.module')
+      .then(m => m.MqaModule),
     },
     {
       path: 'idra-page',

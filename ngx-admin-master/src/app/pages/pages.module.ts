@@ -25,7 +25,7 @@ import {
 import { FormsRoutingModule } from './forms/forms-routing.module';
 import { FormsModule as ngFormsModule } from '@angular/forms';
 import { IdraPageComponent } from './idra-page/idra-page.component';
-import { MqaComponent } from './mqa/mqa.component';
+// import { MqaComponent } from './mqa/mqa.component';
 
 @NgModule({
   imports: [
@@ -55,7 +55,7 @@ import { MqaComponent } from './mqa/mqa.component';
     PagesComponent,
     MyPageComponent,
     IdraPageComponent,
-    MqaComponent,
+    // MqaComponent,
   ],
 })
 export class PagesModule {
