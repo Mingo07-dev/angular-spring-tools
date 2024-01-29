@@ -7,10 +7,177 @@
     <hr>
     <!-- Form Creazione -->
     <div
-        class="row justify-content-center align-items-center g-2"
+        class="row justify-content-center align-items-center"
     >
-        <div class="col-6">
-            
+        <div class="col-12">
+            <nb-accordion>
+                <nb-accordion-item>
+                  <nb-accordion-item-header>
+                    Get Analisys by ID
+                  </nb-accordion-item-header>
+                  <nb-accordion-item-body>
+                    <div class="row justify-content-center align-items-center">
+                        <div class="col-12">
+                            <p style="font-size: small;">This API allows user to get the last submited results for a single catalogue or dataset chosed by ID. <br>
+                            A default ID is provided, try changing it!</p>
+                
+                            <nb-form-field action="getCatalogue">
+                                <div class="form-group">
+                                    <label for="ID"><b>ID*</b></label>
+                                    <input #ID_get nbInput fullWidth shape="round" type="text" placeholder="ID" name="ID" required value="659fd47c58771f020b83e39d">
+                
+                                </div>
+                                <button status="primary" nbButton (click)="getCatalogue(ID_get.value)" type="submit">Find</button>
+                            </nb-form-field>
+                            <hr>
+                        </div>
+                
+                        <div class="col-6">
+                            <div class="row justify-content-center align-items-center">
+                              <h4>Type: <span id="response-type">-</span></h4>
+                            </div>
+                            <div class="row justify-content-center align-items-center">
+                                <div class="col-6">
+                                    <div echarts [options]="option" class="echart"></div>
+                                </div>
+                                <div class="info col-6">
+                                    <div class="h4 value">Over All Score: <span id="overall">0</span></div>
+                                    <div class="details subtitle-2"><span>out of</span> 405</div>
+                                </div>
+                            </div>
+                            <div class="row align-items-center ml-1">
+                              <h5>Metrics</h5>
+                            </div>
+                            <nb-card>
+                                <nb-card-body>
+                              
+                                  <label class="search-label" for="search">Search:</label>
+                                  <input nbInput [nbFilterInput]="dataSource" id="search" class="search-input">
+                              
+                                  <table [nbTreeGrid]="dataSource" [nbSort]="dataSource" (sort)="updateSort($event)">
+                              
+                                    <tr nbTreeGridHeaderRow *nbTreeGridHeaderRowDef="allColumns"></tr>
+                                    <tr nbTreeGridRow *nbTreeGridRowDef="let row; columns: allColumns"></tr>
+                              
+                                    <ng-container [nbTreeGridColumnDef]="customColumn">
+                                      <th nbTreeGridHeaderCell [nbSortHeader]="getSortDirection(customColumn)" *nbTreeGridHeaderCellDef>
+                                        {{customColumn}}
+                                      </th>
+                                      <td nbTreeGridCell *nbTreeGridCellDef="let row">
+                                        <ngx-fs-icon [kind]="row.data.kind" [expanded]="row.expanded"></ngx-fs-icon>
+                                        {{row.data[customColumn]}}
+                                      </td>
+                                    </ng-container>
+                              
+                                    <ng-container *ngFor="let column of defaultColumns; let index = index"
+                                                  [nbTreeGridColumnDef]="column"
+                                                  [showOn]="getShowOn(index)">
+                                      <th nbTreeGridHeaderCell [nbSortHeader]="getSortDirection(column)" *nbTreeGridHeaderCellDef>
+                                        {{column}}
+                                      </th>
+                                      <td nbTreeGridCell *nbTreeGridCellDef="let row">{{row.data[column] || '-'}}</td>
+                                    </ng-container>
+                              
+                                  </table>
+                              
+                                </nb-card-body>
+                              </nb-card>
+                              
+                        </div>
+                        <div class="col-6">
+                            <div class="card">
+                                <div class="card-body" >
+                                    <h5 class="card-title">RESPONSE</h5>
+                                    <pre id="response-get" style="max-height: 950px; min-height: 100px; height: auto;">Here will be shown the answers of requests made</pre>
+                                </div>
+                                </div>
+                        </div>
+                    </div>
+                  </nb-accordion-item-body>
+                </nb-accordion-item>
+          
+                <nb-accordion-item>
+                  <nb-accordion-item-header>
+                    Get Analisys by ID and filter by params
+                  </nb-accordion-item-header>
+                  <nb-accordion-item-body>
+                    <div class="row justify-content-center align-items-center">
+                        <div class="col-12">
+                            <p style="font-size: small;">This API allows user to get the chosen metrics and scores for a single catalogue or dataset chosed by ID. <br>
+                              You can also insert a date range, or just a start date, to also receive older results.</p>
+                            <nb-form-field action="getFiltered">
+                                <div class="form-group">
+                                    <label for="ID"><b>ID*</b></label>
+                                    <input #ID_fil nbInput fullWidth shape="round" type="text" placeholder="ID" name="ID" required value="659fd47c58771f020b83e39d">
+                                    <label for="FILTERS"><b>Filters*</b></label>
+                                    <input #FILTERS_fil nbInput fullWidth shape="round" type="text" name="FILTERS" required placeholder="score, title, datasets.title, datasets.distributions.accessURL">
+                                    <label for="START_DATE"><b>Start date</b></label>
+                                    <input #START_DATE_fil nbInput fullWidth shape="round" type="text" placeholder="dd/mm/yyyy" name="START_DATE" required>
+                                    <label for="END_DATE"><b>End date</b></label>
+                                    <input #END_DATE_fil nbInput fullWidth shape="round" type="text" placeholder="dd/mm/yyyy" name="END_DATE" required>
+        
+                                </div>
+                                <button status="primary" nbButton (click)="getFiltered(ID_fil.value,FILTERS_fil.value,START_DATE_fil.value,END_DATE_fil.value)" type="submit">Find</button>
+                            </nb-form-field>
+                            <hr>
+                        </div>
+
+                
+                        <div class="col-12 ">
+                            <div class="card">
+                                <div class="card-body" >
+                                    <h5 class="card-title">RESPONSE</h5>
+                                    <pre id="response-getfiltered" style="max-height: 950px; min-height: 100px; height: auto;">Here will be shown the answers of requests made</pre>
+                                </div>
+                                </div>
+                        </div>
+                    </div>
+                    
+                  </nb-accordion-item-body>
+                </nb-accordion-item>
+          
+                <nb-accordion-item>
+                  <nb-accordion-item-header>
+                    Submit Analisys with file passed by url
+                  </nb-accordion-item-header>
+                  <nb-accordion-item-body>
+
+                    <div class="row justify-content-center align-items-center">
+                        <div class="col-12">
+                            <p style="font-size: small;">This API allows user to send an RDF file of a catalogue or dataset to make an analisys of it, if already exist an old analisys you must specify the ID, if not a new one will be created. <br>
+                            When API is call, it gives an immediate response with sintax results, if wrong it return an error, otherwhise will continue the analisys. <br>
+                            When analisys is finished, if a notification url was given, the results will be sent to it. In any case results will be saved on the database and can later be read with the get API. <br>Try to use <a  target="_blank"  href="https://webhook.site">https://webhook.site</a> to get the notification, but it can take some minutes.
+                            <br>Keep in mind that the file url must point directly to the file, not to a page that contains it, and the file must be of type RDF.</p> 
+                            <nb-form-field action="submitAnalisysJSON">
+                                <div class="form-group">
+                                    <label for="ID"><b>ID</b></label>
+                                    <input #ID_sub nbInput fullWidth shape="round" type="text" placeholder="ID" name="ID" required>
+                                    <label for="URL"><b>Notification Url</b></label>
+                                    <input #URL_sub nbInput fullWidth shape="round" type="text" placeholder="Use https://webhook.site to get notifications" name="URL" value="">
+                                    <label for="XML"><b>RDF file url *</b></label>
+                                    <input #XML_sub nbInput fullWidth shape="round" type="text" placeholder="https://url-to-file.com" name="XML" required value="https://data.europa.eu/api/hub/repo/datasets/60f30419135bec6a5e480086~~1.rdf?useNormalizedId=true&locale=en" id="RDF">
+                
+                                </div>
+                                <button status="primary" nbButton (click)="submitAnalisysJSON(ID_sub.value,URL_sub.value,XML_sub.value)" type="submit">Send</button>
+                            </nb-form-field>
+                            <hr>
+                        </div>
+                
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-body" >
+                                    <h5 class="card-title">RESPONSE</h5>
+                                    <pre id="response-submit" style="max-height: 950px; min-height: 100px; height: auto;">Here will be shown the answers of requests made</pre>
+                                </div>
+                                </div>
+                        </div>
+                    </div>
+                  </nb-accordion-item-body>
+                </nb-accordion-item>
+              </nb-accordion>
+
+
+<!--               
             <h5>Get Catalogue Analisys by ID</h5>
             <p style="font-size: small;">This API allows user to get the score and all the values of metrics for a catalogue chosed by ID. <br>
             Try changing filters!</p>
@@ -18,56 +185,60 @@
             <nb-form-field action="getCatalogue">
                 <div class="form-group">
                     <label for="ID"><b>ID*</b></label>
-                    <input #ID nbInput fullWidth shape="round" type="text" placeholder="ID" name="ID" required value="659fd47c58771f020b83e39d" disabled>
+                    <input #ID nbInput fullWidth shape="round" type="text" placeholder="ID" name="ID" required value="659fd47c58771f020b83e39d">
 
                 </div>
                 <button status="primary" nbButton (click)="getCatalogue(ID.value)" type="submit">Find</button>
             </nb-form-field>
 
             <br>
-            <hr>
+            <hr> -->
 
-            <h5>Get Catalogue Analisys by ID and filter by params</h5>
+            <!-- <h5>Get Catalogue Analisys by ID and filter by params</h5>
             <p style="font-size: small;">This API allows user to get the chosen metrics and scores for a catalogue chosed by ID.</p>
             <nb-form-field action="getFiltered">
                 <div class="form-group">
                     <label for="ID"><b>ID*</b></label>
-                    <input #ID nbInput fullWidth shape="round" type="text" placeholder="ID" name="ID" required value="659fd47c58771f020b83e39d" disabled>
+                    <input #ID nbInput fullWidth shape="round" type="text" placeholder="ID" name="ID" required value="659fd47c58771f020b83e39d">
                     <label for="FILTERS"><b>Filters*</b></label>
                     <input #FILTERS nbInput fullWidth shape="round" type="text" placeholder="Filters" name="FILTERS" required value="score, title, datasets.title">
+                    <label for="START_DATE"><b>Start date</b></label>
+                    <input #FILTERS nbInput fullWidth shape="round" type="text" placeholder="dd/mm/yyyy" name="START_DATE" required>
+                    <label for="END_DATE"><b>End date</b></label>
+                    <input #FILTERS nbInput fullWidth shape="round" type="text" placeholder="dd/mm/yyyy" name="END_DATE" required>
 
                 </div>
                 <button status="primary" nbButton (click)="getFiltered(ID.value,FILTERS.value)" type="submit">Find</button>
             </nb-form-field>
             
             <br>
-            <hr>
+            <hr> -->
 
-            <h5>Submit Analisys for a Catalogue already registered</h5>
+            <!-- <h5>Submit Analisys for a Catalogue already registered</h5>
             <p style="font-size: small;">This API allows user to send an RDF of a catalogue to make an analisys of it, if already exist an old analisys you must specify the ID, if not a new one will be created. <br>
             When API is call, it gives an immediate response with sintax results, if wrong it return an error, otherwhise will continue the analisys. <br>
             When analisys is finished, if an url was given, the results will be sent to the url. In any case results will be saved on the database and can later be read with the get API. <br>Try to use <a  target="_blank"  href="https://webhook.site">https://webhook.site</a> to get the notification, but it can take some minutes.</p>
             <nb-form-field action="submitAnalisysJSON">
                 <div class="form-group">
                     <label for="ID"><b>ID</b></label>
-                    <input #ID nbInput fullWidth shape="round" type="text" placeholder="ID" name="ID" required value="659fd47c58771f020b83e39d" disabled>
+                    <input #ID nbInput fullWidth shape="round" type="text" placeholder="ID" name="ID" required>
                     <label for="URL"><b>Notification Url</b></label>
                     <input #URL nbInput fullWidth shape="round" type="text" placeholder="Use https://webhook.site to get notifications" name="URL" value="">
-                    <label for="XML"><b>RDF text *</b></label>
-                    <input #XML nbInput fullWidth shape="round" type="text" placeholder="RDF text" name="XML" required value="" disabled id="RDF">
+                    <label for="XML"><b>RDF file url *</b></label>
+                    <input #XML nbInput fullWidth shape="round" type="text" placeholder="https://url-to-file.com" name="XML" required value="https://data.europa.eu/api/hub/repo/datasets/60f30419135bec6a5e480086~~1.rdf?useNormalizedId=true&locale=en" id="RDF">
 
                 </div>
-                <button status="primary" nbButton (click)="submitAnalisysJSON(ID.value,URL.value,XML.value)" type="submit">Find</button>
-            </nb-form-field>
+                <button status="primary" nbButton (click)="submitAnalisysJSON(ID.value,URL.value,XML.value)" type="submit">Sesnd</button>
+            </nb-form-field> -->
         </div>
-        <div class="col-6">
+        <!-- <div class="col-6">
             <div class="card">
                 <div class="card-body" >
                   <h5 class="card-title">RESPONSE</h5>
                   <pre id="response" style="max-height: 950px; min-height: 800px; height: auto;">Here will be shown the answers of requests made</pre>
                 </div>
               </div>
-        </div>
+        </div> -->
     </div>
     
    <br>

@@ -13,7 +13,7 @@ export class MqaService {
 
     getCatalogue(id: String): any {
       return new Promise((resolve,reject)=>{
-        this.http.get('https://platform.beopen-dep.it/mqa-validator/get/catalogue/'+id, {
+        this.http.get('http://localhost:8000/get/catalogue/'+id, {
           headers: {
             'Content-Type':  'application/json',
             'Access-Control-Allow-Origin': '*',
@@ -38,7 +38,7 @@ export class MqaService {
     
     getFiltered(id: String, jsonData : Object): any {
       return new Promise((resolve,reject)=>{
-        this.http.post('https://platform.beopen-dep.it/mqa-validator/get/catalogue/'+id, jsonData, {
+        this.http.post('http://localhost:8000/get/catalogue/'+id, jsonData, {
           headers: {
             'Content-Type':  'application/json',
             'Access-Control-Allow-Origin': '*',
@@ -58,18 +58,31 @@ export class MqaService {
       })
     }
 
-    async submitAnalisysJSON(id : String, url: String): Promise<any> {
-      let xml = await  new Promise(async(resolve,reject)=>{
-      this.http.get("/assets/interstat_rdf.json").subscribe((data: any) => {
-          resolve(data.xml)
-        })
-      })
+    async submitAnalisysJSON(id : String, url: String, xml: String): Promise<any> {
+      let json
+      if(url == "" && id != ""){
+        json = {
+          "id": id,
+          "file_url": xml,
+        }
+      } else if (url != "" && id == ""){
+        json = {
+          "url": url,
+          "file_url": xml,
+        }
+      } else if (url != "" && id != ""){
+        json = {
+          "id": id,
+          "url": url,
+          "file_url": xml,
+        }
+      } else {
+        json = {
+          "file_url": xml,
+        }
+      }
       return new Promise((resolve,reject)=>{
-        this.http.post('https://platform.beopen-dep.it/mqa-validator/submit', {
-            "id": id,
-            "url": url,
-            "xml": xml,
-          }, {
+        this.http.post('http://localhost:8000/submit', json, {
           headers: {
             'Content-Type':  'application/json',
             'Access-Control-Allow-Origin': '*',
@@ -87,15 +100,5 @@ export class MqaService {
           console.log(error);
         })
       })
-    }
-
-
-    async getXML(): Promise<any> {
-      let xml = await  new Promise(async(resolve,reject)=>{
-      this.http.get("/assets/interstat_rdf.json").subscribe((data: any) => {
-          resolve(data.xml)
-        })
-      })
-      return xml
     }
 }
