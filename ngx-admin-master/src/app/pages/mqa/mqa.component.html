@@ -2,7 +2,6 @@
 
 <div class="container">
     <h3>Mqa scoring API demo page</h3>
-    <span>Currently avaiable with just one catalogue</span>
     <br>
     <hr>
     <!-- Form Creazione -->
@@ -34,7 +33,7 @@
                 
                         <div class="col-6">
                             <div class="row justify-content-center align-items-center">
-                              <h4>Type: <span id="response-type">-</span></h4>
+                              <h4>TYPE: <span id="response-type">-</span></h4>
                             </div>
                             <div class="row justify-content-center align-items-center">
                                 <div class="col-6">
@@ -111,10 +110,10 @@
                                     <input #ID_fil nbInput fullWidth shape="round" type="text" placeholder="ID" name="ID" required value="659fd47c58771f020b83e39d">
                                     <label for="FILTERS"><b>Filters*</b></label>
                                     <input #FILTERS_fil nbInput fullWidth shape="round" type="text" name="FILTERS" required placeholder="score, title, datasets.title, datasets.distributions.accessURL">
-                                    <label for="START_DATE"><b>Start date</b></label>
-                                    <input #START_DATE_fil nbInput fullWidth shape="round" type="text" placeholder="dd/mm/yyyy" name="START_DATE" required>
-                                    <label for="END_DATE"><b>End date</b></label>
-                                    <input #END_DATE_fil nbInput fullWidth shape="round" type="text" placeholder="dd/mm/yyyy" name="END_DATE" required>
+                                    <label for="START_DATE"><b>Start date - optional</b></label>
+                                    <input #START_DATE_fil nbInput fullWidth shape="round" type="date" placeholder="dd/mm/yyyy" name="START_DATE" required>
+                                    <label for="END_DATE"><b>End date - optional</b></label>
+                                    <input #END_DATE_fil nbInput fullWidth shape="round" type="date" placeholder="dd/mm/yyyy" name="END_DATE" required>
         
                                 </div>
                                 <button status="primary" nbButton (click)="getFiltered(ID_fil.value,FILTERS_fil.value,START_DATE_fil.value,END_DATE_fil.value)" type="submit">Find</button>
@@ -150,13 +149,13 @@
                             <br>Keep in mind that the file url must point directly to the file, not to a page that contains it, and the file must be of type RDF.</p> 
                             <nb-form-field action="submitAnalisysJSON">
                                 <div class="form-group">
-                                    <label for="ID"><b>ID</b></label>
-                                    <input #ID_sub nbInput fullWidth shape="round" type="text" placeholder="ID" name="ID" required>
-                                    <label for="URL"><b>Notification Url</b></label>
-                                    <input #URL_sub nbInput fullWidth shape="round" type="text" placeholder="Use https://webhook.site to get notifications" name="URL" value="">
-                                    <label for="XML"><b>RDF file url *</b></label>
+                                    <label for="RDF"><b>RDF file url *</b></label>
                                     <input #XML_sub nbInput fullWidth shape="round" type="text" placeholder="https://url-to-file.com" name="XML" required value="https://data.europa.eu/api/hub/repo/datasets/60f30419135bec6a5e480086~~1.rdf?useNormalizedId=true&locale=en" id="RDF">
                 
+                                    <label for="ID"><b>ID - optional</b></label>
+                                    <input #ID_sub nbInput fullWidth shape="round" type="text" placeholder="ID" name="ID" required>
+                                    <label for="URL"><b>Notification Url - optional</b></label>
+                                    <input #URL_sub nbInput fullWidth shape="round" type="text" placeholder="Use https://webhook.site to get notifications" name="URL" value="">
                                 </div>
                                 <button status="primary" nbButton (click)="submitAnalisysJSON(ID_sub.value,URL_sub.value,XML_sub.value)" type="submit">Send</button>
                             </nb-form-field>
@@ -174,71 +173,47 @@
                     </div>
                   </nb-accordion-item-body>
                 </nb-accordion-item>
+
+                <nb-accordion-item>
+                  <nb-accordion-item-header>
+                    Submit Analisys with local file
+                  </nb-accordion-item-header>
+                  <nb-accordion-item-body>
+
+                    <div class="row justify-content-center align-items-center">
+                        <div class="col-12">
+                            <p style="font-size: small;">This API allows user to send an RDF file of a catalogue or dataset to make an analisys of it, if already exist an old analisys you must specify the ID, if not a new one will be created. <br>
+                            When API is call, it gives an immediate response with sintax results, if wrong it return an error, otherwhise will continue the analisys. <br>
+                            When analisys is finished, if a notification url was given, the results will be sent to it. In any case results will be saved on the database and can later be read with the get API. <br>Try to use <a  target="_blank"  href="https://webhook.site">https://webhook.site</a> to get the notification, but it can take some minutes.
+                            <br>Keep in mind that the file loaded from your computer must be of type RDF.</p> 
+                            <nb-form-field action="submitAnalisysJSON">
+                                <div class="form-group">
+                                    <label for="RDF"><b>RDF file url *</b></label>
+                                    <input #XML_sub_local nbInput fullWidth shape="round" type="file" name="XML" (change)="onFileSelected($event)" fieldSize="medium" shape="round" accept="application/rdf+xml" required id="RDF">
+                
+                                    <label for="ID"><b>ID - optional</b></label>
+                                    <input #ID_sub_local nbInput fullWidth shape="round" type="text" placeholder="ID" name="ID" required>
+                                    <label for="URL"><b>Notification Url - optional</b></label>
+                                    <input #URL_sub_local nbInput fullWidth shape="round" type="text" placeholder="Use https://webhook.site to get notifications" name="URL" value="">
+                                </div>
+                                <button status="primary" nbButton (click)="submitAnalisysFile(ID_sub_local.value,URL_sub_local.value)" type="submit">Send</button>
+                            </nb-form-field>
+                            <hr>
+                        </div>
+                
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-body" >
+                                    <h5 class="card-title">RESPONSE</h5>
+                                    <pre id="response-submit-local" style="max-height: 950px; min-height: 100px; height: auto;">Here will be shown the answers of requests made</pre>
+                                </div>
+                                </div>
+                        </div>
+                    </div>
+                  </nb-accordion-item-body>
+                </nb-accordion-item>
               </nb-accordion>
-
-
-<!--               
-            <h5>Get Catalogue Analisys by ID</h5>
-            <p style="font-size: small;">This API allows user to get the score and all the values of metrics for a catalogue chosed by ID. <br>
-            Try changing filters!</p>
-
-            <nb-form-field action="getCatalogue">
-                <div class="form-group">
-                    <label for="ID"><b>ID*</b></label>
-                    <input #ID nbInput fullWidth shape="round" type="text" placeholder="ID" name="ID" required value="659fd47c58771f020b83e39d">
-
-                </div>
-                <button status="primary" nbButton (click)="getCatalogue(ID.value)" type="submit">Find</button>
-            </nb-form-field>
-
-            <br>
-            <hr> -->
-
-            <!-- <h5>Get Catalogue Analisys by ID and filter by params</h5>
-            <p style="font-size: small;">This API allows user to get the chosen metrics and scores for a catalogue chosed by ID.</p>
-            <nb-form-field action="getFiltered">
-                <div class="form-group">
-                    <label for="ID"><b>ID*</b></label>
-                    <input #ID nbInput fullWidth shape="round" type="text" placeholder="ID" name="ID" required value="659fd47c58771f020b83e39d">
-                    <label for="FILTERS"><b>Filters*</b></label>
-                    <input #FILTERS nbInput fullWidth shape="round" type="text" placeholder="Filters" name="FILTERS" required value="score, title, datasets.title">
-                    <label for="START_DATE"><b>Start date</b></label>
-                    <input #FILTERS nbInput fullWidth shape="round" type="text" placeholder="dd/mm/yyyy" name="START_DATE" required>
-                    <label for="END_DATE"><b>End date</b></label>
-                    <input #FILTERS nbInput fullWidth shape="round" type="text" placeholder="dd/mm/yyyy" name="END_DATE" required>
-
-                </div>
-                <button status="primary" nbButton (click)="getFiltered(ID.value,FILTERS.value)" type="submit">Find</button>
-            </nb-form-field>
-            
-            <br>
-            <hr> -->
-
-            <!-- <h5>Submit Analisys for a Catalogue already registered</h5>
-            <p style="font-size: small;">This API allows user to send an RDF of a catalogue to make an analisys of it, if already exist an old analisys you must specify the ID, if not a new one will be created. <br>
-            When API is call, it gives an immediate response with sintax results, if wrong it return an error, otherwhise will continue the analisys. <br>
-            When analisys is finished, if an url was given, the results will be sent to the url. In any case results will be saved on the database and can later be read with the get API. <br>Try to use <a  target="_blank"  href="https://webhook.site">https://webhook.site</a> to get the notification, but it can take some minutes.</p>
-            <nb-form-field action="submitAnalisysJSON">
-                <div class="form-group">
-                    <label for="ID"><b>ID</b></label>
-                    <input #ID nbInput fullWidth shape="round" type="text" placeholder="ID" name="ID" required>
-                    <label for="URL"><b>Notification Url</b></label>
-                    <input #URL nbInput fullWidth shape="round" type="text" placeholder="Use https://webhook.site to get notifications" name="URL" value="">
-                    <label for="XML"><b>RDF file url *</b></label>
-                    <input #XML nbInput fullWidth shape="round" type="text" placeholder="https://url-to-file.com" name="XML" required value="https://data.europa.eu/api/hub/repo/datasets/60f30419135bec6a5e480086~~1.rdf?useNormalizedId=true&locale=en" id="RDF">
-
-                </div>
-                <button status="primary" nbButton (click)="submitAnalisysJSON(ID.value,URL.value,XML.value)" type="submit">Sesnd</button>
-            </nb-form-field> -->
         </div>
-        <!-- <div class="col-6">
-            <div class="card">
-                <div class="card-body" >
-                  <h5 class="card-title">RESPONSE</h5>
-                  <pre id="response" style="max-height: 950px; min-height: 800px; height: auto;">Here will be shown the answers of requests made</pre>
-                </div>
-              </div>
-        </div> -->
     </div>
     
    <br>

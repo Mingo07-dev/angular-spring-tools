@@ -29,7 +29,7 @@ export class MqaComponent implements OnInit {
   ) { 
     this.dataSource = this.dataSourceBuilder.create(this.data);
   }
-
+  file: File | null = null;
   ngOnInit(): void {
   }
   
@@ -295,22 +295,31 @@ export class MqaComponent implements OnInit {
     }
     document.getElementById("response-get").innerHTML = JSON.stringify(response, null, "\t");
   }
-
-  async getFiltered(id : String, filters : String, start_date : String, end_date : String) : Promise<any>{
+  formatDate (input: string) {
+    var datePart = input.match(/\d+/g),
+    year = datePart[0], // get only two digits
+    month = datePart[1], day = datePart[2];
+  
+    return day+'/'+month+'/'+year;
+  }
+  async getFiltered(id : String, filters : String, start_date : string, end_date : string) : Promise<any>{
     if(id == "" || filters == ""){
       return alert("Please check the inputs");
     }
     let json
     if(start_date != "" && end_date != ""){
+      let sd = this.formatDate(start_date);
+      let ed = this.formatDate(end_date);
       json =  {
         "parameters": filters,
-        "start_date": start_date,
-        "end_date": end_date
+        "start_date": sd,
+        "end_date": ed
       }
     } else if (start_date != "" && end_date == ""){
+      let sd = this.formatDate(start_date);
       json =  {
         "parameters": filters,
-        "start_date": start_date
+        "start_date": sd
       }
     } else {
       json =  {
@@ -329,6 +338,21 @@ export class MqaComponent implements OnInit {
     //xml will be added to the body of the request from a local json file because it is too long to be added here
     let response = await this.mqaService.submitAnalisysJSON(id,url,xml);
     document.getElementById("response-submit").innerHTML = JSON.stringify(response, null, "\t");
+  }
+  async submitAnalisysFile(id : string, url : string) : Promise<any>{
+    if(this.file == null){
+      return alert("Please insert a file");
+    }
+    let response = await this.mqaService.submitAnalisysFile(id,url,this.file);
+    document.getElementById("response-submit-local").innerHTML = JSON.stringify(response, null, "\t");
+  }
+
+  onFileSelected(event: any): void{
+    
+    const selectedFile: File = event.target.files[0];
+
+    if (selectedFile) 
+      this.file = selectedFile;
   }
 
 
